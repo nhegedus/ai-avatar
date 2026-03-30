@@ -7,65 +7,45 @@ interface Props {
   onRegenerate: () => void;
 }
 
-export default function ResultCard({
-  imageUrl,
-  loading,
-  loadingStep,
-  onRegenerate,
-}: Props) {
-  function download() {
+export default function ResultCard({ imageUrl, loading, loadingStep }: Props) {
+  async function download() {
     if (!imageUrl) return;
+    const res = await fetch(imageUrl);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = imageUrl;
+    a.href = url;
     a.download = "maxxed-avatar.png";
     a.click();
+    URL.revokeObjectURL(url);
   }
 
   return (
     <div className="result-card">
-      <div className="card-header">
-        <span className="card-title">Generated Avatar</span>
-        {imageUrl && (
-          <span className="tag tag-green" style={{ marginLeft: "auto" }}>
-            READY
-          </span>
-        )}
-      </div>
       <div className="result-body">
         {!loading && !imageUrl && (
           <div className="result-placeholder">
             <div className="big-icon">🎭</div>
-            <p>Your MAXXED avatar will appear here after generation</p>
+            <p>Your avatar will appear here after generation</p>
           </div>
         )}
 
         {loading && (
-          <div className="loading-overlay" style={{ display: "flex" }}>
+          <div className="loading-container">
             <div className="loader-ring" />
             <div className="loading-label">
               Generating your avatar<span>...</span>
             </div>
-            <div
-              style={{
-                fontSize: 12,
-                color: "var(--muted)",
-                fontFamily: "'Space Mono', monospace",
-              }}
-            >
-              {loadingStep}
-            </div>
+            <div className="loading-step">{loadingStep}</div>
           </div>
         )}
 
         {!loading && imageUrl && (
-          <div className="result-image-wrap" style={{ display: "block" }}>
+          <div className="result-image-wrap">
             <img src={imageUrl} alt="Generated Avatar" />
             <div className="result-actions">
-              <button className="btn btn-primary" onClick={download}>
-                DOWNLOAD
-              </button>
-              <button className="btn btn-secondary" onClick={onRegenerate}>
-                REGENERATE
+              <button className="btn-download" onClick={download}>
+                Download
               </button>
             </div>
           </div>
