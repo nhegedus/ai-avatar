@@ -54,7 +54,7 @@ body {
 .page-title {
   font-family: "Black Han Sans", sans-serif;
   font-size: clamp(28px, 5vw, 42px);
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 1px;
   color: var(--text);
 }
@@ -915,4 +915,130 @@ body {
   background: rgba(0, 212, 255, 0.08);
   border: 1px solid rgba(0, 212, 255, 0.2);
   color: var(--accent-cyan);
+}
+
+/* ============ Code Gate (vaul drawer) ============ */
+
+.codegate-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 100;
+}
+
+.codegate-content {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  padding: 12px 28px 36px;
+  z-index: 101;
+  text-align: center;
+  outline: none;
+  overflow: overlay;
+}
+
+@media (min-width: 769px) {
+  .codegate-content {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 420px;
+    border-radius: 24px 24px 0 0;
+  }
+}
+
+.codegate-drawer-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  margin: 0 auto 24px;
+}
+
+.codegate-character-img {
+  display: block;
+  margin: -12px auto 0;
+  height: 120px;
+  width: auto;
+  animation: codegate-bounce 2s ease-in-out infinite;
+}
+
+@keyframes codegate-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.codegate-title {
+  font-family: "Black Han Sans", sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.codegate-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.codegate-digits {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.codegate-digit {
+  width: 64px;
+  height: 72px;
+  background: var(--surface2);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  color: var(--text);
+  font-family: "Black Han Sans", sans-serif;
+  font-size: 30px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  caret-color: var(--accent);
+}
+
+.codegate-digit:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(90, 250, 68, 0.15);
+}
+
+.codegate-digit.filled {
+  border-color: var(--accent);
+  background: rgba(90, 250, 68, 0.06);
+}
+
+.codegate-error {
+  color: var(--accent-pink);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  .codegate-digit {
+    width: 56px;
+    height: 64px;
+    font-size: 26px;
+    border-radius: 14px;
+  }
+
+  .codegate-digits {
+    gap: 10px;
+  }
 }

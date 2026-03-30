@@ -5,6 +5,7 @@ import PhotoRequirements from "@/components/PhotoRequirements";
 import PhotoUpload from "@/components/PhotoUpload";
 import ResultCard from "@/components/ResultCard";
 import UploadDrawer from "@/components/UploadDrawer";
+import CodeGate from "@/components/CodeGate";
 
 async function dataUrlToBlob(dataUrl: string): Promise<Blob> {
   const res = await fetch(dataUrl);
@@ -24,6 +25,7 @@ export default function Home() {
   const [loadingStep, setLoadingStep] = useState("");
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [codeGateOpen, setCodeGateOpen] = useState(false);
 
   const showStatus = useCallback(
     (msg: string, type: "info" | "success" | "error") => {
@@ -107,13 +109,21 @@ export default function Home() {
             </svg>
             New Photo
           </button>
-          <button className="btn-generate" onClick={generate}>
+          <button className="btn-generate" onClick={() => setCodeGateOpen(true)}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
             </svg>
             Regenerate
           </button>
         </div>
+        <CodeGate
+          open={codeGateOpen}
+          onClose={() => setCodeGateOpen(false)}
+          onAuthorized={() => {
+            setCodeGateOpen(false);
+            generate();
+          }}
+        />
       </div>
     );
   }
@@ -201,7 +211,7 @@ export default function Home() {
             </svg>
             Re-upload
           </button>
-          <button className="btn-generate" onClick={generate}>
+          <button className="btn-generate" onClick={() => setCodeGateOpen(true)}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
             </svg>
@@ -233,6 +243,16 @@ export default function Home() {
         open={drawerOpen}
         onOpenChange={setDrawerOpen}
         onPhotoSelected={setPhoto}
+      />
+
+      {/* Code Gate Modal */}
+      <CodeGate
+        open={codeGateOpen}
+        onClose={() => setCodeGateOpen(false)}
+        onAuthorized={() => {
+          setCodeGateOpen(false);
+          generate();
+        }}
       />
 
       {/* Status */}
