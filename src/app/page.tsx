@@ -6,6 +6,8 @@ import PhotoUpload from "@/components/PhotoUpload";
 import ResultCard from "@/components/ResultCard";
 import UploadDrawer from "@/components/UploadDrawer";
 import CodeGate from "@/components/CodeGate";
+import ModelSelector from "@/components/ModelSelector";
+import { DEFAULT_MODEL, type ModelId } from "@/lib/models";
 
 async function dataUrlToBlob(dataUrl: string): Promise<Blob> {
   const res = await fetch(dataUrl);
@@ -24,6 +26,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState("");
   const [resultUrl, setResultUrl] = useState<string | null>(null);
+  const [model, setModel] = useState<ModelId>(DEFAULT_MODEL);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [codeGateOpen, setCodeGateOpen] = useState(false);
 
@@ -62,7 +65,7 @@ export default function Home() {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ faceImageUrl: faceUrl, prompt }),
+        body: JSON.stringify({ faceImageUrl: faceUrl, prompt, model }),
       });
 
       if (!res.ok) {
@@ -199,6 +202,9 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Model Selector */}
+      <ModelSelector value={model} onChange={setModel} />
 
       {/* Bottom actions */}
       {hasPhoto && (

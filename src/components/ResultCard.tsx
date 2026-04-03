@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 interface Props {
   imageUrl: string | null;
   loading: boolean;
@@ -10,12 +12,22 @@ interface Props {
 export default function ResultCard({ imageUrl, loading, loadingStep }: Props) {
   async function download() {
     if (!imageUrl) return;
+
+    // For data URLs (Gemini), create blob directly
+    if (imageUrl.startsWith("data:")) {
+      const a = document.createElement("a");
+      a.href = imageUrl;
+      a.download = "maxxed-avatar.jpg";
+      a.click();
+      return;
+    }
+
     const res = await fetch(imageUrl);
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "maxxed-avatar.png";
+    a.download = "maxxed-avatar.jpg";
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -42,7 +54,17 @@ export default function ResultCard({ imageUrl, loading, loadingStep }: Props) {
 
         {!loading && imageUrl && (
           <div className="result-image-wrap">
-            <img src={imageUrl} alt="Generated Avatar" />
+            {imageUrl.startsWith("data:") ? (
+              <img src={imageUrl} alt="Generated Avatar" />
+            ) : (
+              <Image
+                src={imageUrl}
+                alt="Generated Avatar"
+                width={300}
+                height={300}
+                unoptimized={false}
+              />
+            )}
             <div className="result-actions">
               <button className="btn-download" onClick={download}>
                 Download

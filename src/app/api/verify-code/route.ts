@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const VALID_CODE = "6767";
+const VALID_CODE = "1101";
 
 export async function POST(req: NextRequest) {
   const { code } = await req.json();
